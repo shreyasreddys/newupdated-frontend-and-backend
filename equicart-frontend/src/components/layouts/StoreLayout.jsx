@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
-import { MapPin, Search, User, LogOut, ShoppingCart } from 'lucide-react';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../store/authSlice';
+import { useContext } from 'react';
+import { Outlet, Link } from 'react-router-dom';
+import { MapPin, Search, User, ShoppingCart } from 'lucide-react';
+import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
 import CartSidebar from './CartSidebar';
 
@@ -27,13 +26,13 @@ const StoreLayout = () => {
       <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
           <div className="flex items-center justify-between gap-4">
-            
+
             {/* Logo & Location */}
             <div className="flex items-center gap-6 flex-1 md:flex-none">
               <Link to="/" className="text-2xl font-bold text-white tracking-tight hidden md:block">
                 Equi<span className="text-primary">Cart</span>
               </Link>
-              
+
               <div className="flex flex-col flex-1 md:w-64 cursor-pointer group">
                 <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1">
                   Delivery in 10 mins
@@ -48,9 +47,9 @@ const StoreLayout = () => {
             {/* Search Bar - Desktop */}
             <div className="hidden md:flex flex-1 max-w-2xl relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-textSecondary" size={20} />
-              <input 
-                type="text" 
-                placeholder="Search for groceries, electronics, and more..." 
+              <input
+                type="text"
+                placeholder="Search for groceries, electronics, and more..."
                 className="w-full bg-background border border-white/10 rounded-xl pl-12 pr-4 py-3 text-sm text-white placeholder-textSecondary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-inner"
               />
             </div>
@@ -63,7 +62,7 @@ const StoreLayout = () => {
               </Link>
 
               {user && (
-                <button 
+                <button
                   onClick={handleLogout}
                   className="flex items-center gap-1.5 text-textSecondary hover:text-danger transition-colors cursor-pointer"
                   title="Logout"
@@ -73,7 +72,7 @@ const StoreLayout = () => {
                 </button>
               )}
 
-              <button 
+              <button
                 onClick={() => setIsCartOpen(true)}
                 className="flex items-center gap-2 bg-primary hover:bg-orange-600 text-white px-4 py-2.5 rounded-xl font-medium transition-all shadow-lg shadow-primary/20 relative"
               >
@@ -92,9 +91,9 @@ const StoreLayout = () => {
           {/* Search Bar - Mobile */}
           <div className="mt-3 md:hidden relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-textSecondary" size={18} />
-            <input 
-              type="text" 
-              placeholder="Search items..." 
+            <input
+              type="text"
+              placeholder="Search items..."
               className="w-full bg-background border border-white/10 rounded-xl pl-11 pr-4 py-2.5 text-sm text-white placeholder-textSecondary focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
             />
           </div>

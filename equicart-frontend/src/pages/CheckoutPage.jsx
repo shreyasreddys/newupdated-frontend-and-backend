@@ -11,17 +11,6 @@ const CheckoutPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
-
-  // ADDRESS STATES
-  const [fullName, setFullName] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [house, setHouse] = useState('');
-  const [area, setArea] = useState('');
-
-  // PAYMENT STATE
-  const [paymentMethod, setPaymentMethod] = useState('CREDIT_CARD');
-
   const navigate = useNavigate();
 
   if (cartItems.length === 0 && !success) {
@@ -56,20 +45,17 @@ const CheckoutPage = () => {
         paymentMethod: paymentMethod
       };
 
-      await api.post('/orders', orderPayload);
+      // Simulate API Call to Order/Payment Service
+      // await api.post('/orders', orderPayload);
 
-      setSuccess(true);
-      clearCart();
+      setTimeout(() => {
+        setSuccess(true);
+        clearCart();
+        setLoading(false);
+      }, 1500);
 
     } catch (err) {
-      console.error("Order placement failed", err);
-
-      setError(
-        err.response?.data?.message ||
-        'Failed to place order. Please try again.'
-      );
-
-    } finally {
+      console.error("Order failed", err);
       setLoading(false);
     }
   };
@@ -109,15 +95,7 @@ const CheckoutPage = () => {
         Back to Store
       </Link>
 
-      <h1 className="text-2xl font-bold text-white mb-8">
-        Checkout
-      </h1>
-
-      {error && (
-        <div className="bg-danger/10 border border-danger/20 text-danger px-4 py-3 rounded-xl mb-6 text-sm text-center">
-          {error}
-        </div>
-      )}
+      <h1 className="text-2xl font-bold text-white mb-8">Checkout</h1>
 
       <div className="grid md:grid-cols-2 gap-8">
 
