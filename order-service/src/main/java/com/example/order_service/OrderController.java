@@ -8,9 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -20,11 +21,25 @@ import java.util.stream.Collectors;
 public class OrderController {
 
     private final OrderRepository orderRepository;
+    private final JwtService jwtService;
 
     @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody OrderRequest request) {
+    public ResponseEntity<?> createOrder(
+            @RequestBody OrderRequest request,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        
         if (request.getItems() == null || request.getItems().isEmpty()) {
             return ResponseEntity.badRequest().body(new ErrorMessage("Order items cannot be empty"));
+        }
+
+        String username = null;
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            try {
+                String token = authHeader.substring(7);
+                username = jwtService.extractUsername(token);
+            } catch (Exception e) {
+                System.err.println("Warning: Failed to parse JWT token in order creation: " + e.getMessage());
+            }
         }
 
         List<OrderItem> orderItems = request.getItems().stream()
@@ -35,6 +50,7 @@ public class OrderController {
                 .collect(Collectors.toList());
 
         Order order = Order.builder()
+                .username(username)
                 .shippingAddress(request.getShippingAddress())
                 .paymentMethod(request.getPaymentMethod())
                 .totalAmount(request.getTotalAmount())
@@ -44,13 +60,38 @@ public class OrderController {
                 .build();
 
         Order savedOrder = orderRepository.save(order);
-        
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         return ResponseEntity.ok(orderRepository.findAll());
+    }
+
+    @GetMapping("/my-orders")
+    public ResponseEntity<?> getMyOrders(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorMessage("Missing or invalid Authorization header"));
+        }
+
+        String token = authHeader.substring(7);
+        try {
+            String username = jwtService.extractUsername(token);
+            List<Order> orders = orderRepository.findByUsernameOrderByOrderDateDesc(username);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorMessage("Failed to parse token: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, Object>> getOrderStats() {
+        long count = orderRepository.count();
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalOrders", count);
+        return ResponseEntity.ok(stats);
     }
 
     @Data

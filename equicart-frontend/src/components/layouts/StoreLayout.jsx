@@ -1,13 +1,21 @@
 import React, { useContext } from 'react';
-import { Outlet, Link } from 'react-router-dom';
-import { MapPin, Search, User, ShoppingCart } from 'lucide-react';
-import { AuthContext } from '../../context/AuthContext';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { MapPin, Search, User, LogOut, ShoppingCart } from 'lucide-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/authSlice';
 import { CartContext } from '../../context/CartContext';
 import CartSidebar from './CartSidebar';
 
 const StoreLayout = () => {
-  const { user } = useContext(AuthContext);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { setIsCartOpen, cartCount } = useContext(CartContext);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
@@ -51,8 +59,19 @@ const StoreLayout = () => {
             <div className="flex items-center gap-3 md:gap-4 shrink-0">
               <Link to={user ? "/admin" : "/login"} className="flex items-center gap-2 text-textSecondary hover:text-white transition-colors">
                 <User size={20} />
-                <span className="hidden sm:block text-sm font-medium">{user ? 'Account' : 'Login'}</span>
+                <span className="hidden sm:block text-sm font-medium">{user ? (user.username || 'Account') : 'Login'}</span>
               </Link>
+
+              {user && (
+                <button 
+                  onClick={handleLogout}
+                  className="flex items-center gap-1.5 text-textSecondary hover:text-danger transition-colors cursor-pointer"
+                  title="Logout"
+                >
+                  <LogOut size={18} />
+                  <span className="hidden sm:block text-sm font-medium">Logout</span>
+                </button>
+              )}
 
               <button 
                 onClick={() => setIsCartOpen(true)}

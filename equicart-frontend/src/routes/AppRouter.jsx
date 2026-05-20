@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // Layouts
 import StoreLayout from '../components/layouts/StoreLayout';
@@ -18,12 +19,11 @@ import OrderManagement from '../pages/orders/OrderManagement';
 import PaymentDashboard from '../pages/payments/PaymentDashboard';
 import ProfilePage from '../pages/profile/ProfilePage';
 
-// Simple protected route wrapper
+// Simple protected route wrapper using Redux state
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
+  const token = useSelector((state) => state.auth.token);
   if (!token) {
-    window.location.href = '/login';
-    return null;
+    return <Navigate to="/login" replace />;
   }
   return children;
 };
@@ -35,13 +35,13 @@ const AppRouter = () => {
         {/* Quick Commerce Storefront Routes */}
         <Route path="/" element={<StoreLayout />}>
           <Route index element={<HomePage />} />
-          <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
         </Route>
 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Legacy Admin Dashboard Routes */}
+        {/* Standardized Administrative Console Routes */}
         <Route path="/admin" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<AdminDashboard />} />
           <Route path="products" element={<ProductManagement />} />
@@ -49,6 +49,9 @@ const AppRouter = () => {
           <Route path="payments" element={<PaymentDashboard />} />
           <Route path="profile" element={<ProfilePage />} />
         </Route>
+
+        {/* Fallback to homepage */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
