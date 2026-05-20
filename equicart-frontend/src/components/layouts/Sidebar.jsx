@@ -1,31 +1,36 @@
-import React, { useContext, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Package, 
   ShoppingCart, 
   CreditCard, 
-  Users, 
   Settings, 
   LogOut,
-  ChevronLeft,
-  Menu
+  ChevronLeft
 } from 'lucide-react';
-import { AuthContext } from '../../context/AuthContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/authSlice';
 import { motion } from 'framer-motion';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
-  const { user, logout } = useContext(AuthContext);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const navItems = [
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'Products', path: '/dashboard/products', icon: Package },
-    { name: 'Orders', path: '/dashboard/orders', icon: ShoppingCart },
-    { name: 'Payments', path: '/dashboard/payments', icon: CreditCard },
-    ...(user?.role === 'ADMIN' ? [{ name: 'Admin', path: '/dashboard/admin', icon: Users }] : []),
-    { name: 'Profile', path: '/dashboard/profile', icon: Settings },
+    { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
+    { name: 'Products', path: '/admin/products', icon: Package },
+    { name: 'Orders', path: '/admin/orders', icon: ShoppingCart },
+    { name: 'Payments', path: '/admin/payments', icon: CreditCard },
+    { name: 'Profile', path: '/admin/profile', icon: Settings },
   ];
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
   return (
     <>
@@ -37,7 +42,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         />
       )}
 
-      <motion.aside 
+      <motion.motion 
         initial={false}
         animate={{ 
           width: isOpen ? 256 : 80,
@@ -82,15 +87,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
         <div className="p-4 border-t border-white/5">
           <button 
-            onClick={logout}
-            className={`w-full flex items-center gap-4 px-3 py-3 rounded-xl text-textSecondary hover:bg-danger/10 hover:text-danger transition-all`}
+            onClick={handleLogout}
+            className={`w-full flex items-center gap-4 px-3 py-3 rounded-xl text-textSecondary hover:bg-danger/10 hover:text-danger transition-all cursor-pointer`}
             title={!isOpen ? "Logout" : undefined}
           >
             <LogOut size={20} className="min-w-[20px]" />
             {isOpen && <span className="font-medium truncate">Logout</span>}
           </button>
         </div>
-      </motion.aside>
+      </motion.motion>
     </>
   );
 };

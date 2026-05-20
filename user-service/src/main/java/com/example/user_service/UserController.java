@@ -53,7 +53,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
+        User user = userRepository
+                .findByUsernameOrEmail(
+                        request.getUsername(),
+                        request.getUsername()
+                )
                 .orElse(null);
 
         if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -75,7 +79,37 @@ public class UserController {
                 .user(userResponse)
                 .build();
 
-        return ResponseEntity.ok(authResponse);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfile(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorMessage("Missing or invalid Authorization header"));
+        }
+
+        String token = authHeader.substring(7);
+        try {
+            String username = jwtService.extractUsername(token);
+            User user = userRepository.findByUsernameOrEmail(username, username).orElse(null);
+
+            if (user == null || !jwtService.isTokenValid(token, user.getUsername())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ErrorMessage("Invalid or expired JWT token"));
+            }
+
+            AuthResponse.UserResponse userResponse = AuthResponse.UserResponse.builder()
+                    .id(user.getId())
+                    .username(user.getUsername())
+                    .email(user.getEmail())
+                    .role(user.getRole().name())
+                    .build();
+
+            return ResponseEntity.ok(userResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorMessage("Failed to parse or validate token: " + e.getMessage()));
+        }
     }
 
     // Helper classes for standard JSON responses
