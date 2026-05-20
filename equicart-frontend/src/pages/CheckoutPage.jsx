@@ -10,7 +10,6 @@ const CheckoutPage = () => {
   const { cartItems, cartTotal, clearCart } = useContext(CartContext);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   if (cartItems.length === 0 && !success) {
@@ -31,15 +30,17 @@ const CheckoutPage = () => {
         paymentMethod: "CREDIT_CARD"
       };
       
-      // Call our Spring Boot Order microservice running on port 8082!
-      await api.post('/orders', orderPayload);
+      // Simulate API Call to Order/Payment Service
+      // await api.post('/orders', orderPayload);
       
-      setSuccess(true);
-      clearCart();
-      setLoading(false);
+      setTimeout(() => {
+        setSuccess(true);
+        clearCart();
+        setLoading(false);
+      }, 1500);
+
     } catch (err) {
-      console.error("Order placement failed", err);
-      setError(err.response?.data?.message || 'Failed to place order. Please try again.');
+      console.error("Order failed", err);
       setLoading(false);
     }
   };
@@ -68,12 +69,6 @@ const CheckoutPage = () => {
       </Link>
       
       <h1 className="text-2xl font-bold text-white mb-8">Checkout</h1>
-
-      {error && (
-        <div className="bg-danger/10 border border-danger/20 text-danger px-4 py-3 rounded-xl mb-6 text-sm text-center">
-          {error}
-        </div>
-      )}
 
       <div className="grid md:grid-cols-2 gap-8">
         {/* Left Col: Forms */}
