@@ -1,0 +1,221 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">EquiCart Cloud-Native Serverless Architecture</title>
+  <desc id="desc">Presentation diagram showing users, frontend hosting, authentication, API Gateway, Lambda microservices, data, messaging, security, observability, and CI/CD services on AWS.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7fafc; }
+      .title { font: 700 36px Arial, sans-serif; fill: #111827; }
+      .subtitle { font: 700 16px Arial, sans-serif; fill: #475569; letter-spacing: 3px; }
+      .section-title { font: 700 17px Arial, sans-serif; fill: #0f172a; }
+      .label { font: 700 15px Arial, sans-serif; fill: #0f172a; }
+      .small { font: 13px Arial, sans-serif; fill: #334155; }
+      .tiny { font: 12px Arial, sans-serif; fill: #475569; }
+      .box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; rx: 10; }
+      .user { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; rx: 10; }
+      .frontend { fill: #eef6ff; stroke: #2563eb; }
+      .auth { fill: #fff7ed; stroke: #f97316; }
+      .api { fill: #f5f3ff; stroke: #7c3aed; }
+      .compute { fill: #f0fdf4; stroke: #16a34a; }
+      .data { fill: #eff6ff; stroke: #0284c7; }
+      .msg { fill: #fdf2f8; stroke: #db2777; }
+      .security { fill: #fef2f2; stroke: #dc2626; }
+      .obs { fill: #faf5ff; stroke: #9333ea; }
+      .cicd { fill: #fff7ed; stroke: #ea580c; }
+      .pill { fill: #f8fafc; stroke: #cbd5e1; rx: 8; }
+      .icon { font: 700 28px Arial, sans-serif; fill: #ffffff; }
+      .arrow { stroke: #334155; stroke-width: 2.2; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #64748b; stroke-width: 2; fill: none; stroke-dasharray: 7 7; marker-end: url(#arrow); }
+      .boundary { fill: none; stroke: #94a3b8; stroke-width: 1.5; stroke-dasharray: 8 6; rx: 16; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#334155"/>
+    </marker>
+    <linearGradient id="apiGrad" x1="0" x2="1">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0" x2="1">
+      <stop offset="0" stop-color="#22c55e"/>
+      <stop offset="1" stop-color="#16a34a"/>
+    </linearGradient>
+    <linearGradient id="pinkGrad" x1="0" x2="1">
+      <stop offset="0" stop-color="#ec4899"/>
+      <stop offset="1" stop-color="#db2777"/>
+    </linearGradient>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="1000"/>
+  <text class="title" x="800" y="52" text-anchor="middle">EquiCart - Cloud-Native Smart Retail and Order Management Platform</text>
+  <text class="subtitle" x="800" y="82" text-anchor="middle">SERVERLESS AWS HIGH-LEVEL ARCHITECTURE</text>
+
+  <rect class="boundary" x="28" y="118" width="132" height="285"/>
+  <text class="section-title" x="94" y="146" text-anchor="middle">USERS</text>
+  <circle cx="94" cy="190" r="23" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <path d="M59 246 C65 218, 123 218, 129 246" fill="none" stroke="#0f172a" stroke-width="3"/>
+  <text class="small" x="94" y="273" text-anchor="middle">Customers</text>
+  <circle cx="94" cy="318" r="20" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+  <path d="M63 365 C69 342, 119 342, 125 365" fill="none" stroke="#0f172a" stroke-width="3"/>
+  <text class="small" x="94" y="389" text-anchor="middle">Admins</text>
+
+  <rect class="box frontend" x="200" y="120" width="220" height="285"/>
+  <text class="section-title" x="310" y="150" text-anchor="middle">FRONTEND</text>
+  <rect class="pill" x="230" y="178" width="160" height="76"/>
+  <circle cx="260" cy="216" r="22" fill="#3b82f6"/>
+  <text class="icon" x="260" y="225" text-anchor="middle">R</text>
+  <text class="label" x="326" y="208" text-anchor="middle">React App</text>
+  <text class="tiny" x="326" y="230" text-anchor="middle">Vite SPA</text>
+  <rect class="pill" x="230" y="282" width="160" height="76"/>
+  <circle cx="260" cy="320" r="22" fill="#0ea5e9"/>
+  <text class="icon" x="260" y="329" text-anchor="middle">S3</text>
+  <text class="label" x="326" y="311" text-anchor="middle">Static Assets</text>
+  <text class="tiny" x="326" y="333" text-anchor="middle">HTML CSS JS</text>
+
+  <rect class="box" x="470" y="160" width="128" height="82"/>
+  <circle cx="534" cy="190" r="20" fill="#7c3aed"/>
+  <text class="icon" x="534" y="199" text-anchor="middle">53</text>
+  <text class="label" x="534" y="223" text-anchor="middle">Route 53</text>
+
+  <rect class="box" x="640" y="160" width="150" height="82"/>
+  <circle cx="715" cy="190" r="20" fill="#7c3aed"/>
+  <text class="icon" x="715" y="199" text-anchor="middle">CF</text>
+  <text class="label" x="715" y="223" text-anchor="middle">CloudFront</text>
+
+  <rect class="box" x="832" y="160" width="140" height="82"/>
+  <circle cx="902" cy="190" r="20" fill="#16a34a"/>
+  <text class="icon" x="902" y="199" text-anchor="middle">S3</text>
+  <text class="label" x="902" y="223" text-anchor="middle">S3 Hosting</text>
+
+  <rect class="box auth" x="650" y="105" width="350" height="110"/>
+  <text class="section-title" x="825" y="133" text-anchor="middle">AUTHENTICATION AND AUTHORIZATION</text>
+  <circle cx="730" cy="168" r="22" fill="#f97316"/>
+  <text class="icon" x="730" y="177" text-anchor="middle">CO</text>
+  <text class="label" x="730" y="203" text-anchor="middle">Cognito</text>
+  <circle cx="920" cy="168" r="22" fill="#ef4444"/>
+  <text class="icon" x="920" y="177" text-anchor="middle">IAM</text>
+  <text class="label" x="920" y="203" text-anchor="middle">IAM Roles</text>
+
+  <rect class="box api" x="680" y="285" width="290" height="100"/>
+  <rect x="710" y="313" width="68" height="48" rx="8" fill="url(#apiGrad)"/>
+  <text class="icon" x="744" y="346" text-anchor="middle">API</text>
+  <text class="section-title" x="850" y="327" text-anchor="middle">Amazon API Gateway</text>
+  <text class="small" x="850" y="352" text-anchor="middle">REST/HTTP routes, JWT auth, throttling</text>
+
+  <rect class="boundary compute" x="245" y="455" width="825" height="220"/>
+  <text class="section-title" x="657" y="485" text-anchor="middle">SERVERLESS MICROSERVICES</text>
+
+  <g>
+    <rect class="box compute" x="280" y="515" width="138" height="112"/>
+    <rect x="325" y="538" width="48" height="42" rx="8" fill="url(#greenGrad)"/>
+    <text class="icon" x="349" y="568" text-anchor="middle">L</text>
+    <text class="label" x="349" y="604" text-anchor="middle">User</text>
+    <text class="tiny" x="349" y="624" text-anchor="middle">profiles roles</text>
+  </g>
+  <g>
+    <rect class="box compute" x="450" y="515" width="138" height="112"/>
+    <rect x="495" y="538" width="48" height="42" rx="8" fill="url(#greenGrad)"/>
+    <text class="icon" x="519" y="568" text-anchor="middle">L</text>
+    <text class="label" x="519" y="604" text-anchor="middle">Product</text>
+    <text class="tiny" x="519" y="624" text-anchor="middle">catalog inventory</text>
+  </g>
+  <g>
+    <rect class="box compute" x="620" y="515" width="138" height="112"/>
+    <rect x="665" y="538" width="48" height="42" rx="8" fill="url(#greenGrad)"/>
+    <text class="icon" x="689" y="568" text-anchor="middle">L</text>
+    <text class="label" x="689" y="604" text-anchor="middle">Order</text>
+    <text class="tiny" x="689" y="624" text-anchor="middle">checkout tracking</text>
+  </g>
+  <g>
+    <rect class="box compute" x="790" y="515" width="138" height="112"/>
+    <rect x="835" y="538" width="48" height="42" rx="8" fill="url(#greenGrad)"/>
+    <text class="icon" x="859" y="568" text-anchor="middle">L</text>
+    <text class="label" x="859" y="604" text-anchor="middle">Payment</text>
+    <text class="tiny" x="859" y="624" text-anchor="middle">gateway invoice</text>
+  </g>
+  <g>
+    <rect class="box compute" x="960" y="515" width="138" height="112"/>
+    <rect x="1005" y="538" width="48" height="42" rx="8" fill="url(#greenGrad)"/>
+    <text class="icon" x="1029" y="568" text-anchor="middle">L</text>
+    <text class="label" x="1029" y="604" text-anchor="middle">Notify</text>
+    <text class="tiny" x="1029" y="624" text-anchor="middle">email sms alerts</text>
+  </g>
+
+  <rect class="boundary data" x="255" y="708" width="780" height="136"/>
+  <text class="section-title" x="645" y="738" text-anchor="middle">DATA LAYER</text>
+  <rect class="box data" x="295" y="762" width="180" height="58"/>
+  <text class="label" x="385" y="787" text-anchor="middle">DynamoDB</text>
+  <text class="tiny" x="385" y="808" text-anchor="middle">catalog orders users payments</text>
+  <rect class="box data" x="555" y="762" width="180" height="58"/>
+  <text class="label" x="645" y="787" text-anchor="middle">S3 Documents</text>
+  <text class="tiny" x="645" y="808" text-anchor="middle">invoices reports backups</text>
+  <rect class="box data" x="815" y="762" width="180" height="58"/>
+  <text class="label" x="905" y="787" text-anchor="middle">Aurora Serverless</text>
+  <text class="tiny" x="905" y="808" text-anchor="middle">optional SQL reporting</text>
+
+  <rect class="boundary msg" x="1120" y="330" width="210" height="330"/>
+  <text class="section-title" x="1225" y="360" text-anchor="middle">MESSAGING</text>
+  <rect class="box msg" x="1155" y="400" width="140" height="70"/>
+  <rect x="1180" y="416" width="42" height="36" rx="8" fill="url(#pinkGrad)"/>
+  <text class="icon" x="1201" y="443" text-anchor="middle">Q</text>
+  <text class="label" x="1250" y="433" text-anchor="middle">SQS</text>
+  <text class="tiny" x="1250" y="453" text-anchor="middle">queues</text>
+  <rect class="box msg" x="1155" y="525" width="140" height="70"/>
+  <rect x="1180" y="541" width="42" height="36" rx="8" fill="url(#pinkGrad)"/>
+  <text class="icon" x="1201" y="568" text-anchor="middle">N</text>
+  <text class="label" x="1250" y="558" text-anchor="middle">SNS</text>
+  <text class="tiny" x="1250" y="578" text-anchor="middle">email sms</text>
+
+  <rect class="boundary security" x="1360" y="120" width="200" height="275"/>
+  <text class="section-title" x="1460" y="150" text-anchor="middle">SECURITY</text>
+  <text class="label" x="1460" y="195" text-anchor="middle">IAM Policies</text>
+  <text class="label" x="1460" y="238" text-anchor="middle">KMS Encryption</text>
+  <text class="label" x="1460" y="281" text-anchor="middle">Secrets Manager</text>
+  <text class="label" x="1460" y="324" text-anchor="middle">AWS WAF</text>
+  <text class="tiny" x="1460" y="356" text-anchor="middle">least privilege by service</text>
+
+  <rect class="boundary obs" x="1360" y="430" width="200" height="205"/>
+  <text class="section-title" x="1460" y="460" text-anchor="middle">OBSERVABILITY</text>
+  <text class="label" x="1460" y="508" text-anchor="middle">CloudWatch</text>
+  <text class="tiny" x="1460" y="530" text-anchor="middle">logs metrics alarms</text>
+  <text class="label" x="1460" y="575" text-anchor="middle">AWS X-Ray</text>
+  <text class="tiny" x="1460" y="597" text-anchor="middle">distributed tracing</text>
+
+  <rect class="boundary cicd" x="170" y="875" width="1160" height="86"/>
+  <text class="section-title" x="750" y="900" text-anchor="middle">CI/CD PIPELINE</text>
+  <text class="label" x="260" y="934" text-anchor="middle">GitHub</text>
+  <text class="label" x="410" y="934" text-anchor="middle">Jenkins</text>
+  <text class="label" x="560" y="934" text-anchor="middle">Tests</text>
+  <text class="label" x="710" y="934" text-anchor="middle">SonarQube</text>
+  <text class="label" x="875" y="934" text-anchor="middle">Build</text>
+  <text class="label" x="1035" y="934" text-anchor="middle">ECR/Lambda</text>
+  <text class="label" x="1200" y="934" text-anchor="middle">Deploy</text>
+
+  <path class="arrow" d="M160 225 L200 225"/>
+  <path class="arrow" d="M420 225 L470 205"/>
+  <path class="arrow" d="M598 201 L640 201"/>
+  <path class="arrow" d="M790 201 L832 201"/>
+  <path class="arrow" d="M902 242 L902 285"/>
+  <path class="arrow" d="M790 168 L765 168"/>
+  <path class="arrow" d="M825 215 L825 285"/>
+  <path class="arrow" d="M825 385 L825 455"/>
+  <path class="arrow" d="M744 385 L349 515"/>
+  <path class="arrow" d="M780 385 L519 515"/>
+  <path class="arrow" d="M825 385 L689 515"/>
+  <path class="arrow" d="M870 385 L859 515"/>
+  <path class="arrow" d="M920 385 L1029 515"/>
+  <path class="arrow" d="M349 627 L385 762"/>
+  <path class="arrow" d="M519 627 L385 762"/>
+  <path class="arrow" d="M689 627 L385 762"/>
+  <path class="arrow" d="M859 627 L385 762"/>
+  <path class="arrow" d="M859 627 L645 762"/>
+  <path class="arrow" d="M689 627 L1205 400"/>
+  <path class="arrow" d="M1205 470 L1205 525"/>
+  <path class="arrow" d="M1295 558 L1360 558"/>
+  <path class="dash" d="M970 335 L1360 260"/>
+  <path class="dash" d="M970 350 L1360 520"/>
+  <path class="arrow" d="M300 934 L370 934"/>
+  <path class="arrow" d="M450 934 L520 934"/>
+  <path class="arrow" d="M600 934 L670 934"/>
+  <path class="arrow" d="M760 934 L835 934"/>
+  <path class="arrow" d="M920 934 L995 934"/>
+  <path class="arrow" d="M1090 934 L1160 934"/>
+</svg>
